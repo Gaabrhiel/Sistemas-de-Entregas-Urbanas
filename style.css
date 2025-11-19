@@ -1,0 +1,27 @@
+/* Estilos personalizados */
+        :root {
+            --pizza-red: #E3342F;
+            --pizza-orange: #FF8800;
+            --pizza-bg: #F8F8F8;
+            --font-inter: 'Inter', sans-serif;
+        }
+        body {
+            font-family: var(--font-inter);
+            background-color: var(--pizza-bg);
+        }
+        .card {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: var(--pizza-red);
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: #C53030;
+        }
+        #delivery-map {
+            border: 1px solid #e5e7eb;
+            background-color: #f7f3e8; /* Cor do fundo do mapa, similar ao seu desenho */
+            width: 100%;
+            border-radius: 0.5rem;
+        }

@@ -2,7 +2,7 @@
         :root {
             --pizza-red: #E3342F;
             --pizza-orange: #FF8800;
-            --pizza-bg: #F8F8F8;
+            --pizza-bg: #eb1010;
             --font-inter: 'Inter', sans-serif;
         }
         body {
@@ -20,7 +20,7 @@
             background-color: #C53030;
         }
         #delivery-map {
-            border: 1px solid #e5e7eb;
+            border: 1px solid #0254f9;
             background-color: #f7f3e8; /* Cor do fundo do mapa, similar ao seu desenho */
             width: 100%;
             border-radius: 0.5rem;

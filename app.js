@@ -1,6 +1,5 @@
 // app.js
-// Versão atualizada: mapa, grafo, conexões, pesos, canvas, formulários.
-// IDs automáticos gerados, correspondendo ao mapa enviado.
+// Versão atualizada: Ruas mais distanciadas para evitar sobreposição de nomes.
 
 // ---------- UTILIDADES E ESTRUTURAS (Graph + Dijkstra + OrderQueue) ----------
 class Graph {
@@ -56,22 +55,19 @@ class Graph {
     }
 }
 
-// Fila de Ordem Simples (FIFO) usando Array (CORRIGIDO)
+// Fila de Ordem Simples (FIFO) usando Array
 class OrderQueue {
     constructor() {
-        this.items = []; // Array para armazenar os itens na ordem de inserção (FIFO)
+        this.items = []; 
     }
     insert(key, value) {
-        // A chave (sequência) e o valor (pedido) são adicionados ao final
         this.items.push({ key, value });
     }
     popMin() {
-        // Em FIFO, removemos o item mais antigo (o primeiro)
         if (this.items.length === 0) return null;
         return this.items.shift();
     }
     inorder() {
-        // Retorna a lista atual de pedidos pendentes na ordem FIFO
         return this.items;
     }
 }
@@ -89,7 +85,7 @@ class SistemaEntrega {
     _createCity() {
         // NÓS - Bairros
         const bairros = {
-            'DIVINO': 'BAIRRO_DIVINO', // NOVO DEPÓSITO
+            'DIVINO': 'BAIRRO_DIVINO', 
             'CENTRO': 'BAIRRO_CENTRO',
             'SAO_PAULO': 'BAIRRO_SAO_PAULO',
             'SAO_PEDRO': 'BAIRRO_SAO_PEDRO',
@@ -103,30 +99,30 @@ class SistemaEntrega {
         const ruas = {
             'RUA_SP_NOVA_VITORIA': 'R. Nova Vitória',
             'RUA_SP_VITORIA': 'R. Vitória',
-            'RUA_SPD_SANTA_DA_BAIA': 'R. Santa da Baia', // Nome atualizado
+            'RUA_SPD_SANTA_DA_BAIA': 'R. Santa da Baia',
             'RUA_SPD_SANTA_RITA': 'R. Santa Rita',
             'RUA_SPD_SAO_FRANCISCO': 'R. São Francisco',
             'RUA_CENTRO_PASTOS': 'R. Pastos',
             'RUA_CENTRO_ESPERANCA': 'R. Esperança',
             'RUA_CENTRO_AGUAS': 'R. Águas',
-            'RUA_PAZ_CEDRO': 'R. Cedro',
+            'RUA_PAZ_CEDRO': 'R. Cedro', 
             'RUA_SJ_DAS_FLORES': 'R. Das Flores',
-            'RUA_SJ_DOS_SOIS': 'R. Dos Sóis'
-            // Aparecida não tem ruas explicitadas na requisição
+            'RUA_SJ_DOS_SOIS': 'R. Dos Sóis',
+            'RUA_AP_DA_IPE': 'R. Ipê' 
         };
         for (const [id,label] of Object.entries(ruas)) this.g.addNode(id, label);
 
         // ---------- ARESTAS: LIGAÇÕES DIRETAS E PESOS ATUALIZADOS ----------
         
         // 1. LIGAÇÕES DEPÓSITO (BAIRRO DIVINO)
-        this.g.addEdge(this.depotNode, 'BAIRRO_SAO_PEDRO', 7); // Divino -> Sao Pedro (Peso 7)
-        this.g.addEdge(this.depotNode, 'BAIRRO_CENTRO', 3);    // Divino -> Centro (Peso 3)
+        this.g.addEdge(this.depotNode, 'BAIRRO_SAO_PEDRO', 7); 
+        this.g.addEdge(this.depotNode, 'BAIRRO_CENTRO', 3);    
 
         // 2. LIGAÇÕES BAIRRO-BAIRRO
-        this.g.addEdge('BAIRRO_CENTRO', 'BAIRRO_SAO_JORGE', 6);    // Centro -> Sao Jorge (Peso 6)
-        this.g.addEdge('BAIRRO_CENTRO', 'BAIRRO_PAZ', 11);         // Centro -> Paz (Peso 11)
-        this.g.addEdge('BAIRRO_SAO_PEDRO', 'BAIRRO_SAO_PAULO', 8); // Sao Pedro -> Sao Paulo (Peso 8)
-        this.g.addEdge('BAIRRO_SAO_PEDRO', 'BAIRRO_APARECIDA', 7); // Sao Pedro -> Aparecida (Peso 7)
+        this.g.addEdge('BAIRRO_CENTRO', 'BAIRRO_SAO_JORGE', 6);    
+        this.g.addEdge('BAIRRO_CENTRO', 'BAIRRO_PAZ', 11);         
+        this.g.addEdge('BAIRRO_SAO_PEDRO', 'BAIRRO_SAO_PAULO', 8); 
+        this.g.addEdge('BAIRRO_SAO_PEDRO', 'BAIRRO_APARECIDA', 7); 
         
         // 3. LIGAÇÕES BAIRRO-RUA (Pesos internos)
         // São Paulo
@@ -145,6 +141,8 @@ class SistemaEntrega {
         // São Jorge
         this.g.addEdge('BAIRRO_SAO_JORGE', 'RUA_SJ_DAS_FLORES', 6);
         this.g.addEdge('BAIRRO_SAO_JORGE', 'RUA_SJ_DOS_SOIS', 7);
+        // Aparecida
+        this.g.addEdge('BAIRRO_APARECIDA', 'RUA_AP_DA_IPE', 4);
         
         // Mapeamento para o formulário (apenas bairros com ruas)
         this._bairros = {
@@ -152,7 +150,8 @@ class SistemaEntrega {
             'SAO_PAULO': { 'Nova Vitória': 'RUA_SP_NOVA_VITORIA', 'Vitória': 'RUA_SP_VITORIA' },
             'SAO_PEDRO': { 'Santa da Baia': 'RUA_SPD_SANTA_DA_BAIA', 'Santa Rita': 'RUA_SPD_SANTA_RITA', 'São Francisco': 'RUA_SPD_SAO_FRANCISCO' },
             'SAO_JORGE': { 'Das Flores': 'RUA_SJ_DAS_FLORES', 'Dos Sóis': 'RUA_SJ_DOS_SOIS' },
-            'PAZ': { 'Cedro': 'RUA_PAZ_CEDRO' }
+            'PAZ': { 'Cedro': 'RUA_PAZ_CEDRO' },
+            'APARECIDA': { 'Ipê': 'RUA_AP_DA_IPE' }
         };
 
         // Build reverse lookup for rua selection
@@ -224,7 +223,7 @@ class SistemaEntrega {
     listarPendentes() { return this.queue.inorder().map(i=>i.value); }
 }
 
-// ---------- UI / Canvas / Integração (Posições ajustadas) ----------
+// ---------- UI / Canvas / Integração (Posições ajustadas e Espaçadas) ----------
 const sistema = new SistemaEntrega();
 let currentRouteData = { rotaNodes: [], pathNames: [], totalDistance: 0.0, nodeToClientMap: new Map() };
 
@@ -246,39 +245,40 @@ const elements = {
 const ctx = elements.canvas.getContext('2d');
 
 const nodePositions = {
-    // BAIRROS PRINCIPAIS
-    'BAIRRO_DIVINO':  { x: 350, y: 300, label: 'Divino / Pizzaria' }, // DEPOT
+    // BAIRROS PRINCIPAIS (Divino no centro)
+    'BAIRRO_DIVINO':  { x: 350, y: 300, label: 'Divino / Pizzaria' }, 
     'BAIRRO_CENTRO': { x: 350, y: 200, label: 'Centro' },
 
-    'BAIRRO_SAO_JORGE': { x: 350, y: 80, label: 'São Jorge' }, // Norte
-    'BAIRRO_PAZ': { x: 550, y: 300, label: 'Paz' }, // Leste (ajustado)
+    'BAIRRO_SAO_JORGE': { x: 350, y: 80, label: 'São Jorge' }, 
+    'BAIRRO_PAZ': { x: 550, y: 250, label: 'Paz' }, 
 
-    'BAIRRO_SAO_PEDRO': { x: 150, y: 300, label: 'São Pedro' }, // Oeste (ajustado)
-    'BAIRRO_APARECIDA': { x: 150, y: 450, label: 'Aparecida' }, // Sudoeste (ajustado)
+    'BAIRRO_SAO_PEDRO': { x: 150, y: 300, label: 'São Pedro' }, 
+    'BAIRRO_APARECIDA': { x: 150, y: 450, label: 'Aparecida' }, 
+    'BAIRRO_SAO_PAULO': { x: 550, y: 450, label: 'São Paulo' }, 
 
-    'BAIRRO_SAO_PAULO': { x: 550, y: 450, label: 'São Paulo' }, // Sudeste (ajustado)
+    // RUAS CENTRO - (Radial e distanciadas do nó)
+    'RUA_CENTRO_ESPERANCA':   { x: 350, y: 110, label: 'R. Esperança' }, // Bem acima
+    'RUA_CENTRO_PASTOS':      { x: 230, y: 200, label: 'R. Pastos' }, // Bem a esquerda
+    'RUA_CENTRO_AGUAS':       { x: 470, y: 200, label: 'R. Águas' },  // Bem a direita
 
+    // RUAS SÃO JORGE - (Em V para cima)
+    'RUA_SJ_DAS_FLORES': { x: 280, y: 30, label: 'R. Das Flores' },
+    'RUA_SJ_DOS_SOIS':   { x: 420, y: 30, label: 'R. Dos Sóis' },
 
-    // RUAS CENTRO
-    'RUA_CENTRO_PASTOS':      { x: 300, y: 160, label: 'R. Pastos' },
-    'RUA_CENTRO_ESPERANCA':   { x: 350, y: 160, label: 'R. Esperança' },
-    'RUA_CENTRO_AGUAS':       { x: 400, y: 160, label: 'R. Águas' },
+    // RUAS PAZ - (Para a direita)
+    'RUA_PAZ_CEDRO': { x: 670, y: 250, label: 'R. Cedro' },
 
-    // RUAS SÃO JORGE
-    'RUA_SJ_DAS_FLORES': { x: 320, y: 40, label: 'R. Das Flores' },
-    'RUA_SJ_DOS_SOIS':   { x: 380, y: 40, label: 'R. Dos Sóis' },
+    // RUAS SÃO PEDRO - (Verticalmente espalhadas a esquerda)
+    'RUA_SPD_SANTA_DA_BAIA': { x: 50, y: 230, label: 'R. Santa da Baia' },
+    'RUA_SPD_SANTA_RITA':     { x: 30, y: 300, label: 'R. Santa Rita' },
+    'RUA_SPD_SAO_FRANCISCO':  { x: 50, y: 370, label: 'R. São Francisco' },
 
-    // RUAS PAZ
-    'RUA_PAZ_CEDRO': { x: 600, y: 250, label: 'R. Cedro' },
+    // RUAS APARECIDA - (Deslocada para esquerda-baixo)
+    'RUA_AP_DA_IPE': { x: 80, y: 520, label: 'R. Ipê' },
 
-    // RUAS SÃO PEDRO
-    'RUA_SPD_SANTA_DA_BAIA':  { x: 100, y: 250, label: 'R. Santa da Baia' },
-    'RUA_SPD_SANTA_RITA':     { x: 150, y: 250, label: 'R. Santa Rita' },
-    'RUA_SPD_SAO_FRANCISCO':  { x: 200, y: 250, label: 'R. São Francisco' },
-
-    // RUAS SÃO PAULO
-    'RUA_SP_NOVA_VITORIA': { x: 500, y: 500, label: 'R. Nova Vitória' },
-    'RUA_SP_VITORIA':      { x: 600, y: 500, label: 'R. Vitória' },
+    // RUAS SÃO PAULO - (Bem abertas em baixo)
+    'RUA_SP_NOVA_VITORIA': { x: 480, y: 550, label: 'R. Nova Vitória' },
+    'RUA_SP_VITORIA':      { x: 620, y: 550, label: 'R. Vitória' },
 };
 
 
@@ -304,7 +304,6 @@ function drawMotoboy(x,y) {
 
 function drawMapStatic(routeData) {
     const { rotaNodes, nodeToClientMap } = routeData;
-    const currentRouteNodeIds = new Set(rotaNodes);
 
     ctx.clearRect(0,0,elements.canvas.width, elements.canvas.height);
 
@@ -372,8 +371,8 @@ function drawMapStatic(routeData) {
         // cor por tipo
         if (isDepot) ctx.fillStyle = '#059669'; // verde
         else if (isBairro) ctx.fillStyle = '#2563EB'; // azul
-        else if (isRua && isDestination) ctx.fillStyle = '#E3342F'; // rua com entrega = vermelho
-        else if (isRua) ctx.fillStyle = '#E3342F'; // ruas - vermelho (pontos de rua)
+        else if (isRua && isDestination) ctx.fillStyle = '#fe0800ff'; // rua com entrega = vermelho
+        else if (isRua) ctx.fillStyle = '#ff0800ff'; // ruas - vermelho (pontos de rua)
         else ctx.fillStyle = '#9CA3AF'; // fallback
 
         ctx.fill();
@@ -565,7 +564,7 @@ elements.showRouteBtn.addEventListener('click', () => {
 function resizeCanvas() {
     const parentWidth = elements.canvas.parentElement.offsetWidth;
     elements.canvas.width = parentWidth;
-    elements.canvas.height = Math.round(parentWidth * (600/700));
+    elements.canvas.height = Math.round(parentWidth * (650/700));
     drawMapStatic(currentRouteData);
 }
 

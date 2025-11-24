@@ -1,33 +1,28 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Entregas - Pizzaria (Mapa Personalizado)</title>
-    <!-- Carrega Tailwind CSS para estilização -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sistema de Entregas - Mapa Personalizado</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-
-<div id="app" class="min-h-screen p-4 sm:p-8">
-    <!-- Título Principal -->
+<div id="app" class="min-h-screen p-4 sm:p-8 bg-gray-50">
     <header class="text-center mb-8">
-        <h1 class="text-4xl font-extrabold text-gray-800">🛵 Sistema de Entregas - Mapa Personalizado</h1>
-        <p class="text-lg text-gray-600 mt-1">Otimização de Rotas e Simulação Visual</p>
+        <h1 class="text-4xl font-extrabold text-gray-800">🛵 PIZZARIA CASA DA MASSA</h1>
+        <p class="text-lg text-gray-600 mt-1">Sistema de Entregas da Pizzaria Casa da Massa</p>
     </header>
 
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        <!-- Coluna 1: Nova Entrega -->
         <div class="lg:col-span-1 card bg-white p-6 rounded-xl">
             <h2 class="text-2xl font-bold mb-6 border-b pb-2 text-pizza-red">1. Nova Entrega</h2>
             <form id="delivery-form" class="space-y-4">
                 <div>
                     <label for="cliente" class="block text-sm font-medium text-gray-700">Nome do Cliente</label>
                     <input type="text" id="cliente" required
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-pizza-red focus:border-pizza-red">
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:ring-pizza-red focus:border-pizza-red" />
                 </div>
-                
+
                 <div>
                     <label for="bairro" class="block text-sm font-medium text-gray-700">Bairro</label>
                     <select id="bairro" required
@@ -35,7 +30,7 @@
                         <option value="" disabled selected>Selecione o Bairro</option>
                     </select>
                 </div>
-                
+
                 <div>
                     <label for="rua" class="block text-sm font-medium text-gray-700">Rua (Ponto de Entrega)</label>
                     <select id="rua" required disabled
@@ -43,22 +38,20 @@
                         <option value="" disabled selected>Selecione a Rua</option>
                     </select>
                 </div>
-                
+
               <button type="submit"
-    class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-red-700 hover:shadow-lg transition">
-    Adicionar Entrega e Recalcular Rota
-</button>
+                      class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-red-700 hover:shadow-lg transition">
+                Adicionar Entrega e Recalcular Rota
+              </button>
             </form>
 
             <div id="message-box" class="mt-4 p-3 rounded-lg text-sm hidden"></div>
         </div>
 
-        <!-- Coluna 2: Ações de Entrega -->
         <div class="lg:col-span-2 space-y-8">
-            <!-- Rotas e Ações -->
             <div class="card bg-white p-6 rounded-xl">
-                <h2 class="text-2xl font-bold mb-4 border-b pb-2 text-pizza-red">2. Rota e Ações (Mapa e Simulação)</h2>
-                
+                <h2 class="text-2xl font-bold mb-4 border-b pb-2 text-pizza-red">2. Rota e Ações </h2>
+
                 <div class="flex flex-col sm:flex-row gap-4 mb-4">
                     <button id="show-route-btn" class="flex-1 bg-yellow-500 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition">
                         Mostrar Rota Ótima (Vizinho Mais Próximo)
@@ -68,26 +61,18 @@
                     </button>
                 </div>
 
-                <!-- Mini-Mapa Canvas -->
                 <div class="mb-6 flex justify-center">
-                    <!-- O tamanho inicial do canvas será ajustado pelo JS no carregamento -->
-                    <canvas id="delivery-map" width="700" height="600"></canvas> 
+                    <canvas id="delivery-map" width="700" height="600"></canvas>
                 </div>
-                
+
                 <div id="route-display" class="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
                     <p class="font-semibold text-gray-700 flex items-center mb-2">
-                        <svg class="w-5 h-5 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM6.5 9a.5.5 0 01.5-.5h6a.5.5 0 010 1H7a.5.5 0 01-.5-.5z" clip-rule="evenodd"/>
-                        </svg>
                         Caminho da Rota (Total Distância: <span id="total-distance" class="font-extrabold text-blue-700 ml-1">0.00 km</span>)
                     </p>
-                    <div id="route-path" class="text-sm text-gray-800 break-words space-y-1">
-                        <!-- Conteúdo preenchido pelo JS -->
-                    </div>
+                    <div id="route-path" class="text-sm text-gray-800 break-words space-y-1"></div>
                 </div>
             </div>
 
-            <!-- Pedidos Pendentes -->
             <div class="card bg-white p-6 rounded-xl">
                 <h2 class="text-2xl font-bold mb-4 border-b pb-2 text-pizza-red">3. Pedidos Pendentes (<span id="pending-count">0</span>)</h2>
                 <div id="pending-orders-list" class="space-y-3 max-h-96 overflow-y-auto">
@@ -97,8 +82,7 @@
         </div>
     </div>
 </div>
-</body>
 
 <script src="app.js"></script>
-
+</body>
 </html>

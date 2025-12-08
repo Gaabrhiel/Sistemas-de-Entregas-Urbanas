@@ -91,7 +91,11 @@ class SistemaEntrega {
             'SAO_PEDRO': 'BAIRRO_SAO_PEDRO',
             'APARECIDA': 'BAIRRO_APARECIDA',
             'SAO_JORGE': 'BAIRRO_SAO_JORGE',
-            'PAZ': 'BAIRRO_PAZ'
+            'PAZ': 'BAIRRO_PAZ',
+            'NOVESPERANCA': 'BAIRRO_NOVA_ESPERANCA',
+            'BELAVISTA': 'BAIRRO_BELA_VISTA',
+            'NOVA_MORADA': 'BAIRRO_NOVA_MORADA',
+            
         };
         for (const [k,id] of Object.entries(bairros)) this.g.addNode(id, k.replace('_',' '));
 
@@ -108,7 +112,14 @@ class SistemaEntrega {
             'RUA_PAZ_CEDRO': 'R. Cedro', 
             'RUA_SJ_DAS_FLORES': 'R. Das Flores',
             'RUA_SJ_DOS_SOIS': 'R. Dos Sóis',
-            'RUA_AP_DA_IPE': 'R. Ipê' 
+            'RUA_AP_DA_IPE': 'R. Ipê',
+            'RUA_NE_JARDIM_NOVO': 'R. Jardim Novo',
+            'RUA_NE_BELA_VISTA': 'R. Bela Vista',
+            'RUA_BV_HORIZONTE': 'R. Horizonte',
+            'RUA_BV_COLINAS': 'R. Colinas',
+             'RUA_NM_BOSQUE_VERDE': 'R. Bosque Verde',
+             'RUA_NM_CRISTAL': 'R. Cristal',
+            
         };
         for (const [id,label] of Object.entries(ruas)) this.g.addNode(id, label);
 
@@ -123,7 +134,10 @@ class SistemaEntrega {
         this.g.addEdge('BAIRRO_CENTRO', 'BAIRRO_PAZ', 11);         
         this.g.addEdge('BAIRRO_SAO_PEDRO', 'BAIRRO_SAO_PAULO', 8); 
         this.g.addEdge('BAIRRO_SAO_PEDRO', 'BAIRRO_APARECIDA', 7); 
-        
+        this.g.addEdge('BAIRRO_CENTRO', 'BAIRRO_NOVA_ESPERANCA', 9);
+        this.g.addEdge('BAIRRO_PAZ', 'BAIRRO_BELA_VISTA', 10);
+        this.g.addEdge('BAIRRO_SAO_PEDRO', 'BAIRRO_NOVA_MORADA', 10);
+
         // 3. LIGAÇÕES BAIRRO-RUA (Pesos internos)
         // São Paulo
         this.g.addEdge('BAIRRO_SAO_PAULO', 'RUA_SP_NOVA_VITORIA', 8);
@@ -143,6 +157,17 @@ class SistemaEntrega {
         this.g.addEdge('BAIRRO_SAO_JORGE', 'RUA_SJ_DOS_SOIS', 7);
         // Aparecida
         this.g.addEdge('BAIRRO_APARECIDA', 'RUA_AP_DA_IPE', 4);
+        // Nova Esperança
+        this.g.addEdge('BAIRRO_NOVA_ESPERANCA', 'RUA_NE_JARDIM_NOVO', 5);
+        this.g.addEdge('BAIRRO_NOVA_ESPERANCA', 'RUA_NE_BELA_VISTA', 6);
+
+        // Bela Vista
+        this.g.addEdge('BAIRRO_BELA_VISTA', 'RUA_BV_HORIZONTE', 7);
+        this.g.addEdge('BAIRRO_BELA_VISTA', 'RUA_BV_COLINAS', 5);
+
+        // Nova Morada
+       this.g.addEdge('BAIRRO_NOVA_MORADA', 'RUA_NM_BOSQUE_VERDE', 5);
+       this.g.addEdge('BAIRRO_NOVA_MORADA', 'RUA_NM_CRISTAL', 6);
         
         // Mapeamento para o formulário (apenas bairros com ruas)
         this._bairros = {
@@ -151,7 +176,10 @@ class SistemaEntrega {
             'SAO_PEDRO': { 'Santa da Baia': 'RUA_SPD_SANTA_DA_BAIA', 'Santa Rita': 'RUA_SPD_SANTA_RITA', 'São Francisco': 'RUA_SPD_SAO_FRANCISCO' },
             'SAO_JORGE': { 'Das Flores': 'RUA_SJ_DAS_FLORES', 'Dos Sóis': 'RUA_SJ_DOS_SOIS' },
             'PAZ': { 'Cedro': 'RUA_PAZ_CEDRO' },
-            'APARECIDA': { 'Ipê': 'RUA_AP_DA_IPE' }
+            'APARECIDA': { 'Ipê': 'RUA_AP_DA_IPE' },
+            'NOVA_ESPERANCA': { 'Jardim Novo': 'RUA_NE_JARDIM_NOVO', 'Bela Vista': 'RUA_NE_BELA_VISTA' },
+            'BELA_VISTA': { 'Horizonte': 'RUA_BV_HORIZONTE', 'Colinas': 'RUA_BV_COLINAS' },
+            'NOVA_MORADA': { 'Bosque Verde': 'RUA_NM_BOSQUE_VERDE', 'Cristal': 'RUA_NM_CRISTAL' },
         };
 
         // Build reverse lookup for rua selection
@@ -279,6 +307,22 @@ const nodePositions = {
     // RUAS SÃO PAULO - (Bem abertas em baixo)
     'RUA_SP_NOVA_VITORIA': { x: 480, y: 550, label: 'R. Nova Vitória' },
     'RUA_SP_VITORIA':      { x: 620, y: 550, label: 'R. Vitória' },
+    // BAIRRO NOVA ESPERANCA (acima do bairro Paz)
+    'BAIRRO_NOVA_ESPERANCA': { x: 650, y: 150, label: 'Nova Esperança' },
+    'RUA_NE_JARDIM_NOVO':   { x: 720, y: 110, label: 'R. Jardim Novo' },
+    'RUA_NE_BELA_VISTA':    { x: 720, y: 190, label: 'R. Bela Vista' },
+
+     // BAIRRO BELA VISTA (abaixo de Aparecida)
+     'BAIRRO_BELA_VISTA': { x: 150, y: 560, label: 'Bela Vista' },
+    'RUA_BV_HORIZONTE':  { x: 80,  y: 610, label: 'R. Horizonte' },
+    'RUA_BV_COLINAS':    { x: 230, y: 630, label: 'R. Colinas' },
+// BAIRRO NOVA MORADA (logo acima de São Pedro)
+'BAIRRO_NOVA_MORADA':  { x: 150, y: 220, label: 'Nova Morada' },
+
+// RUAS NOVA MORADA (um pouco acima e abertas)
+'RUA_NM_BOSQUE_VERDE': { x: 100, y: 180, label: 'R. Bosque Verde' },
+'RUA_NM_CRISTAL':      { x: 200, y: 180, label: 'R. Cristal' },
+
 };
 
 

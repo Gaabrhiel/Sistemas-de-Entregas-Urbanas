@@ -1,5 +1,4 @@
 // app.js
-// Versão atualizada: Ruas mais distanciadas para evitar sobreposição de nomes.
 
 // ---------- UTILIDADES E ESTRUTURAS (Graph + Dijkstra + OrderQueue) ----------
 class Graph {
